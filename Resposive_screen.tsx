@@ -3,7 +3,7 @@ import mobileImg;
 
 function App() {
 
-  const imageUrl = windowWidth >= 650 ? desktopImg : mobileImg;
+  const imageUrl = =useWindowWidth() >= 650 ? desktopImg : mobileImg;
   
   return()
     ..
