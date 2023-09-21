@@ -1,0 +1,149 @@
+Tilt Card on Hover
+
+-----------------nextjs's tsx component--------------------
+
+"use client"
+
+import React, { useState, MouseEventHandler } from 'react';
+import styles from './Card.module.css';
+
+export default function Card() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    resetCard(); // Reset the card state when the mouse leaves
+  };
+
+  const resetCard = () => {
+    const card = document.querySelector(`.${styles.card}`) as HTMLElement;
+    if (card) {
+      card.style.transform = '';
+      const glow = card.querySelector('.glow') as HTMLDivElement; // Type assertion
+      if (glow) {
+        glow.style.backgroundImage = 'radial-gradient(circle at 50% -20%, #ffffff22, #0000000f)';
+      }
+    }
+  };
+
+  const rotateToMouse: MouseEventHandler<HTMLDivElement> = (e) => {
+    if (isHovered) {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const bounds = e.currentTarget.getBoundingClientRect(); // Use currentTarget to access the div element
+      const leftX = mouseX - bounds.left;
+      const topY = mouseY - bounds.top;
+      const center = {
+        x: leftX - bounds.width / 2,
+        y: topY - bounds.height / 2,
+      };
+      const distance = Math.sqrt(center.x ** 2 + center.y ** 2);
+
+      e.currentTarget.style.transform = `
+        scale3d(1.1, 1.1, 1.1)
+        rotate3d(
+          ${center.y / 100},
+          ${-center.x / 100},
+          0,
+          ${Math.log(distance) * 2}deg
+        )
+      `;
+
+//applies a radial gradient background to create a glowing effect around the
+//mouse pointer's position within the element.
+  
+const glow = e.currentTarget.querySelector('.glow') as HTMLDivElement; // Type assertion
+      if (glow) {
+        glow.style.backgroundImage = `
+          radial-gradient(
+            circle at
+            ${center.x * 2 + bounds.width / 2}px
+            ${center.y * 2 + bounds.height / 2}px,
+            #ffffff55,
+            #0000000f
+          )
+        `;
+      }
+    }
+  };
+
+  return (
+<main className="card-perspective">
+    <div
+      className={`${styles.radialGradient} ${isHovered} ? ${styles.card} ${styles.hovered} : ${styles.card}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={rotateToMouse}
+    >
+      <div className={`${styles.bgcolor}`}>
+          <div>
+
+          </div>
+      </div>
+      
+       <div className={styles.glow} /> 
+    </div>
+</main>
+  );
+}
+
+-------card.module.css--------------
+
+/* Card styles */
+.card {
+
+    perspective: 1000px;
+  font-weight: bold;
+  padding: 2px;
+  text-align: right;
+  color: white;
+
+  width: 300px;
+  height: 400px;
+  box-shadow: 0 1px 5px #00000099;
+
+  border-radius: 20px;
+  background: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+
+  position: relative;
+
+  transition-duration: 300ms;
+  transition-property: transform, box-shadow;
+  transition-timing-function: ease-out;
+  transform: rotate3d(0);
+}
+
+.bgcolor {
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  background-color: rgb(21 16 48);
+}
+
+.card:hover {
+  transition-duration: 150ms;
+  box-shadow: 0 5px 20px 5px #00000044;
+}
+
+.card .glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+
+  border-image: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+  border-style: solid;
+}
+
+--------------Add this to global.css or app.css---------------
+.card-perspective{
+  perspective: 1000px;
+}
+
+
