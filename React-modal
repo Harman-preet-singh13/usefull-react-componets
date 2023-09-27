@@ -1,0 +1,82 @@
+customModal.tsx
+
+import { ReactNode } from "react";
+import Modal from "react-modal";
+
+type customModalProps = {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  contentLabel: string;
+  children: ReactNode;
+};
+
+export default function customModal({
+  isOpen,
+  onRequestClose,
+  contentLabel,
+  children,
+}: customModalProps) {
+  return;
+  <Modal
+    isOpen={isOpen}
+    onRequestClose={onRequestClose}
+    contentLabel={contentLabel}
+    overlayClassName="modal-overlay"
+    className="modal-content"
+  >
+    {children}
+  </Modal>;
+}
+
+------------------------------------------------
+css
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+------------------------------------
+app.tsx
+
+import React, { useState } from 'react';
+import CustomModal from '../components/Modal';
+
+export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  return (
+    <div>
+      <h1>Next.js Modal Example</h1>
+      <button onClick={openModal}>Open Modal</button>
+      <CustomModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+      >
+        <h2>Modal Content</h2>
+        <p>This is the content of the modal.</p>
+        <button onClick={closeModal}>Close Modal</button>
+      </CustomModal>
+    </div>
+  );
+}
+
