@@ -1,0 +1,96 @@
+This carousel wihout buttons.
+--------------------------------------------------
+  carosuel.tsx
+
+  "use client";
+
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import images from "../app/components/images.js"
+
+export default function page() {
+
+  const [width, setWidth] = useState(0);
+  const [next, setNext] = useState(0)
+  const carousel = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+
+    console.log(carousel.current)
+
+
+    if (carousel.current) {
+      const totalWidth = carousel.current?.scrollWidth - carousel.current?.offsetWidth || 0;
+      setWidth(totalWidth);
+
+      console.log(totalWidth)
+  
+    }
+  }, [images]);
+
+  return (
+    <main className="c">
+
+      <motion.div
+        ref={(el) => (carousel.current = el)}
+        className="carousel-container"
+        whileTap={{cursor:"grabbing"}}
+      >
+        <motion.div
+          drag="x"
+          dragConstraints={{ right: 0, left: -width }}
+          className="inner-carousel"
+        >
+          {images.map((image, index) => {
+            return (
+              <motion.div 
+              key={index} 
+              className="item"
+             
+              >
+                <img src={image.src} />
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </motion.div>
+   </main>
+  );
+}
+
+---------------------------------------
+css
+
+/* carousel using famer motion */
+
+/* body{
+  color:white;
+  margin: 10% 10%;
+}
+
+
+
+.carousel-container{
+  padding-inline:40px;
+  cursor: grab;
+  overflow: hidden;
+  background-color: white;
+}
+
+.inner-carousel{
+  display: flex;
+  
+}
+
+.item{
+  min-height: 40rem;
+  min-width: 30rem;
+  padding:40px;
+}
+
+.item img{
+  width: 100%;
+  height: 100%;
+  border-radius: .5rem;
+} 
+  
