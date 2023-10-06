@@ -1,0 +1,48 @@
+tsx file: 
+
+"use client";
+
+import React, { ChangeEvent, useState } from "react";
+
+export default function Page() {
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  console.log(form)
+  return (
+    <>
+      <div className="">
+        <form>
+          <div>
+            <label>Enter you First name:</label>
+          <input
+            type="text"
+            name="firstName"
+            placeholder="name"
+            onChange={handleChange}
+          /> 
+          </div>
+          <div className="mt-4">
+            <label>Enter you last name:</label>
+          <input
+            type="text"
+            name="lastName"
+            placeholder="name"
+            onChange={handleChange}
+          />
+            </div>
+          
+        </form>
+      </div>
+    </>
+  );
+}
