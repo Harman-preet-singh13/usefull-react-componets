@@ -1,0 +1,43 @@
+"use client";
+
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
+export default function Page() {
+  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("search");
+
+  function handleBackbtn() {
+    setSearch("")
+  }
+
+  return (
+    <>
+    <div>
+      <Link
+      onClick={handleBackbtn}
+      href="/"
+      >
+        Go back
+      </Link>
+    </div>
+    <div className="text-center">
+      <input
+        type="text"
+        placeholder="Type here"
+        className="input input-bordered input-primary w-full max-w-xs"
+        value={search}
+        onChange={(e)=>setSearch(e.target.value)}
+      />
+      <Link href={`?search=${search}`}>This is btn</Link>
+      <div className="mt-10">
+        <h1>
+          you searched for: {searchQuery}
+        </h1>
+      </div>
+    </div>
+    </>
+  );
+}
