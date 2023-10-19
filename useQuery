@@ -1,0 +1,52 @@
+"use client"
+
+import axios from "axios";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+
+const client = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com/posts",
+});
+
+const queryClient = new QueryClient();
+
+export default function page() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <PostData />
+    </QueryClientProvider>
+  )
+}
+
+
+export function PostData() {
+  
+  const {isLoading, error, data, isFetching} = useQuery("postData",()=>
+    client.get(`?_limit=10`).then((res)=>res.data)
+  )
+
+  console.log(data)
+
+  if (isLoading) return(
+    <div className=" loading-box">
+    <div className="animate-pulse m-4 flex flex-col gap-3">
+    </div>
+  </div>
+  );
+
+  if(error) return "An error has occurred: " + error;
+
+  return (
+    <>
+      
+        <div className="w-[400px]">
+          <ul>
+            {data.map((post) => {
+              return <li key={post.id}>{post.title}</li>;
+            })}
+          </ul>
+        </div>
+    
+              
+    </>
+  );
+}
