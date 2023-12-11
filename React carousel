@@ -1,67 +1,82 @@
 React carousel with btn and indicator
 
-import React, { useEffect, useState } from "react";
-import Parent from "./components/Parent";
-import { useContext } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import ThemeContext from "./context/ThemeContext";
 import Images from "./components/Images";
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi";
 
 export default function App() {
 
+  const imgRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentWidth, setCurrentWidth] = useState(0);
+  
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % Images.length);
-    }, 3000);
+    if (imgRef.current) {
+      setCurrentWidth(imgRef.current.clientWidth);
 
-    return () => clearInterval(intervalId);
+      const intervalId = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % Images.length);
+      }, 3000);
+
+      return () => clearInterval(intervalId);
+    }
   }, []);
 
-  const translateValue = `translateX(${currentIndex * -305}px)`;
+
+  const translateValue = `translateX(${currentIndex * -currentWidth}px)`;
 
   const indexHandler = (index) => {
+    console.log(index);
+
     setCurrentIndex(index);
   };
 
-
   const prevBtnImg = () => {
-    setCurrentIndex((prevIndex)=> (prevIndex - 1 + Images.length) % Images.length);
-  }
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + Images.length) % Images.length
+    );
+  };
 
   const nextBtnImg = () => {
-    setCurrentIndex((prevIndex)=> (prevIndex + 1 + Images.length) % Images.length);
-  }
+    setCurrentIndex(
+      (prevIndex) => (prevIndex + 1 + Images.length) % Images.length
+    );
+  };
 
   return (
     <>
-      <div className="box-container h-screen flex justify-center items-center">
-        <div style={{ position: "relative" }}>
-          <div className="wrapper">
-            {Images.map((images, index) => {
-              return (
-                <div
-                  key={index}
-                  style={{
-                    transform: translateValue,
-                  }}
-                  className=""
-                >
-                  <img
-                    src={images.url}
-                    className=" bg-slate-400 h-48 w-[200px] border rounded-full"
-                    alt="wallpaper"
-                  />
-                  <h2 className="text-center ml-12 font-mono text-lg font-semibold">
-                    {images.name}
-                  </h2>
+    <h1 className="text-4xl font-mono text-center">Card carosuel</h1>
+      <div className="img-container">
+        <div ref={imgRef} style={{position:"relative"}} className="img-wrapper">
+          {Images.map((data, index)=> {
+            return(
+              <div 
+              style={{
+                transform: translateValue,
+              }}
+              key={index} className="img-card">
+                <div>
+                   <h1>
+                  {data.name}
+                </h1>
+                <p>
+                  Ut pariatur officia aute incididunt exercitation voluptate.
+                </p>
                 </div>
-              );
-            })}
-          </div>
-          <div className="dots-container">
+               
+                <img
+                src={data.url}
+                alt="data"
+                className=""
+                />
+                
+              </div>
+            )
+          })}
+        </div>
+        <div className="dots-container">
             {Images.map((_, index) => {
               return (
                 <>
@@ -92,44 +107,13 @@ export default function App() {
             </button>
           </div>
         </div>
-      </div>
+    
     </>
   );
 }
 
+
 CSS: 
-.wrapper{
-
-    overflow-x: hidden;
-    border: 2px solid blue;
-    border-radius: 20px;
-
-    width: 400px;
-    padding: 20px;
-
-    display: flex;
-    
-}
-
-
-:root{
-    --translate-multiplier: -310px;
-}
-
-.img-container{
-    z-index: 1;
-}
-
-img{
-    margin-left:80px;
-    margin-right:220px;
-}
-
-.active{
-    transform: translateX(var(--translate-multiplier));
-    transition: transform 0.5s ease-in-out;
-}
-
 .dots-container{
     display: flex;
     justify-content: center;
@@ -152,7 +136,7 @@ img{
 
 .btn{
     font-size: 28px;
-    opacity: 0.5;
+    opacity: 0.2;
 }
 
 .btn:hover{
@@ -162,12 +146,60 @@ img{
 
 .btn-left{
     position: absolute;
-    top:43%;
+    top:35%;
     left:0;
 }
 
 .btn-right{
     position: absolute;
-    top:43%;
+    top:35%;
     right:0;
 }
+
+@media(max-width:767px){
+    .btn-left{
+        position: absolute;
+        top:40%;
+        left:0;
+    }
+    
+    .btn-right{
+        position: absolute;
+        top:40%;
+        right:0;
+    }
+}
+
+.img-container{
+    margin-top:100px;
+    max-width:1024px;
+    margin-inline:auto;
+
+    border:2px solid;
+    padding:20px;
+}
+
+.img-wrapper{
+   overflow-x: hidden;
+    display: flex;
+
+    max-width: 768px;
+    margin-inline: auto;
+}
+
+.img-wrapper > div {
+    flex: 0 0 100%; /* Set the width of each image container to 100% */
+    box-sizing: border-box; /* Include padding and border in the width */
+  }
+  
+  .img-wrapper img {
+    width: 50%; 
+    height: auto; 
+    margin-inline: auto;
+    background-color: antiquewhite;
+  }
+
+  .img-card{
+    display: flex;
+    
+  }
