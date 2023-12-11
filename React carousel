@@ -48,7 +48,12 @@ export default function App() {
   return (
     <>
     <h1 className="text-4xl font-mono text-center">Card carosuel</h1>
-      <div className="img-container">
+      <div         
+        style={{
+          position: "relative",
+        }}
+          className="img-container"
+        >
         <div ref={imgRef} style={{position:"relative"}} className="img-wrapper">
           {Images.map((data, index)=> {
             return(
@@ -146,13 +151,13 @@ CSS:
 
 .btn-left{
     position: absolute;
-    top:35%;
+    top:50%;
     left:0;
 }
 
 .btn-right{
     position: absolute;
-    top:35%;
+    top:50%;
     right:0;
 }
 
