@@ -1,0 +1,151 @@
+Sidebar using react-icons
+
+js-
+import React, { useState } from "react";
+import "./App.css";
+import { FaHome } from "react-icons/fa";
+import { RiMoneyDollarBoxFill } from "react-icons/ri";
+import { MdContactPage } from "react-icons/md";
+import { BiAngry } from "react-icons/bi";
+import { MdMenu } from "react-icons/md";
+
+const NavTag = [
+  {
+    name: "Home",
+    icon: <FaHome className=" text-2xl" />,
+  },
+  {
+    name: "Price",
+    icon: <RiMoneyDollarBoxFill className=" text-2xl" />,
+  },
+  {
+    name: "Contact",
+    icon: <MdContactPage className=" text-2xl" />,
+  },
+  {
+    name: "About",
+    icon: <BiAngry className=" text-2xl" />,
+  },
+];
+
+export default function App() {
+  const [open, setOpen] = useState(false);
+
+  function handleClick() {
+    setOpen(!open);
+  }
+
+  return (
+    <nav>
+      <div className=" flex justify-between items-center">
+        <ul
+          id="primary-navigation"
+          className={`primary-navigation 
+      p-2 flex gap-4  font-semibold
+      ${open && "active"} 
+      `}
+        >
+          <li
+            onClick={handleClick}
+            className="flex justify-center text-2xl cursor-pointer "
+          >
+            {}
+            <MdMenu />
+          </li>
+          {NavTag.map((tag, index) => (
+            <li
+              key={index}
+              className=" py-2 btn-transition hover:bg-slate-200 hover:text-black "
+            >
+              {open ? (
+                <div className="flex gap-2 justify-center cursor-pointer ">
+                  <div
+                    className={`${
+                      index === 0
+                        ? "mr-2"
+                        : index === 1
+                        ? "mr-3"
+                        : index === 2
+                        ? "ml-3"
+                        : index === 3
+                        ? "mr-0"
+                        : ""
+                    }`}
+                  >
+                    {tag.icon}
+                  </div>
+                  <div
+                    className={`${
+                      index === 0
+                        ? "mr-2"
+                        : index === 1
+                        ? "mr-3"
+                        : index === 2
+                        ? "ml-3"
+                        : index === 3
+                        ? "ml-3"
+                        : ""
+                    }`}
+                  >
+                    {tag.name}
+                  </div>
+                </div>
+              ) : (
+                <div className={`flex justify-center cursor-pointer mr-0
+                border-l-4 border-r-4 border-white hover:border-blue-500
+                
+                `}
+               
+                >
+                  {tag.icon}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  );
+}
+
+CSS-
+
+    .primary-navigation{
+  
+      z-index: 9;
+  
+      position: absolute;
+      left: 0;
+      top: 0;
+  
+      width: 80px;
+      height: calc(100vh);
+      transition: all 0.3s ease-in;
+      overflow: hidden;
+  
+      flex-direction: column;
+      gap:2em;
+      
+    
+      padding:min(24vh, 3rem) 0em;
+      
+      background-color: white;
+      
+    }
+  
+    .primary-navigation li {
+      text-align: center;
+    }
+  
+    .primary-navigation.active{
+      width: 300px;
+    }
+  
+  .btn-transition{
+    transition: color 150ms ease-in;
+  }
+
+  .btn-transition:hover{
+    color:rgb(59 130 246);
+  }
+
